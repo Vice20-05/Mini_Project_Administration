@@ -38,9 +38,9 @@ namespace Mini_Project_Administration
             this.lblStatus = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // dataGridView1
-            //
+            // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -52,26 +52,28 @@ namespace Mini_Project_Administration
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(330, 270);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
-            //
+            // 
             // lblName
-            //
+            // 
             this.lblName.AutoSize = true;
             this.lblName.Location = new System.Drawing.Point(355, 12);
             this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(83, 13);
+            this.lblName.Size = new System.Drawing.Size(81, 13);
+            this.lblName.TabIndex = 1;
             this.lblName.Text = "Category name:";
-            //
+            // 
             // txtName
-            //
+            // 
             this.txtName.Location = new System.Drawing.Point(358, 30);
             this.txtName.MaxLength = 50;
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(150, 20);
             this.txtName.TabIndex = 1;
-            //
+            // 
             // btnAdd
-            //
+            // 
             this.btnAdd.Location = new System.Drawing.Point(358, 62);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(150, 23);
@@ -79,9 +81,9 @@ namespace Mini_Project_Administration
             this.btnAdd.Text = "Add new";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            //
+            // 
             // btnRename
-            //
+            // 
             this.btnRename.Location = new System.Drawing.Point(358, 91);
             this.btnRename.Name = "btnRename";
             this.btnRename.Size = new System.Drawing.Size(150, 23);
@@ -89,9 +91,9 @@ namespace Mini_Project_Administration
             this.btnRename.Text = "Rename selected";
             this.btnRename.UseVisualStyleBackColor = true;
             this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
-            //
+            // 
             // btnDelete
-            //
+            // 
             this.btnDelete.Location = new System.Drawing.Point(358, 120);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(150, 23);
@@ -99,9 +101,9 @@ namespace Mini_Project_Administration
             this.btnDelete.Text = "Delete selected";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            //
+            // 
             // btnClose
-            //
+            // 
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClose.Location = new System.Drawing.Point(358, 259);
             this.btnClose.Name = "btnClose";
@@ -109,16 +111,17 @@ namespace Mini_Project_Administration
             this.btnClose.TabIndex = 5;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
-            //
+            // 
             // lblStatus
-            //
+            // 
             this.lblStatus.AutoSize = true;
             this.lblStatus.Location = new System.Drawing.Point(12, 292);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 13);
-            //
+            this.lblStatus.TabIndex = 6;
+            // 
             // CategoryForm
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;

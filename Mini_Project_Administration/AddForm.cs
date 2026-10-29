@@ -12,13 +12,13 @@ namespace Mini_Project_Administration
         private bool existingProduct;
 
         // results read by Form1 after ShowDialog() returns OK
-        public Product NewProduct { get; private set; }
+        public Produse NewProduct { get; private set; }
         public int ProductId { get { return (int)numId.Value; } }
         public int Quantity { get { return (int)numQuantity.Value; } }
 
         // categories = list for the category ComboBox (loaded by Form1 from the database)
         // selectedProductId = Id pre-filled in "existing product" mode (0 = nothing selected)
-        public AddForm(bool existingProduct, List<ProductCategory> categories, int selectedProductId)
+        public AddForm(bool existingProduct, List<CategorieProdus> categories, int selectedProductId)
         {
             InitializeComponent();
             this.existingProduct = existingProduct;
@@ -44,15 +44,15 @@ namespace Mini_Project_Administration
                 lblId.Visible = numId.Visible = false;
                 dtpExpiration.Value = DateTime.Today.AddMonths(1);
 
-                // fill the category ComboBox (it shows ProductCategory.ToString() = Name)
-                foreach (ProductCategory c in categories)
+                // fill the category ComboBox (it shows CategorieProdus.ToString() = Name)
+                foreach (CategorieProdus c in categories)
                     cboCategory.Items.Add(c);
                 if (cboCategory.Items.Count > 0)
                     cboCategory.SelectedIndex = 0;
             }
         }
 
-        // OK button: validates the input and creates the new Product object if necessary
+        // OK button: validates the input and creates the new Produse object if necessary
         private void btnOK_Click(object sender, EventArgs e)
         {
             if (!existingProduct)
@@ -68,25 +68,30 @@ namespace Mini_Project_Administration
                     MessageBox.Show("The expiration date can't be before the entry date.");
                     return;
                 }
-                ProductCategory category = cboCategory.SelectedItem as ProductCategory;
+                CategorieProdus category = cboCategory.SelectedItem as CategorieProdus;
                 if (category == null)
                 {
                     MessageBox.Show("Choose a category.");
                     return;
                 }
 
-                NewProduct = new Product
+                NewProduct = new Produse
                 {
-                    Name = txtName.Text.Trim(),
+                    denumire = txtName.Text.Trim(),
                     Description = txtDescription.Text.Trim(),
                     EntryDate = dtpEntryDate.Value.Date,
                     ExpirationDate = dtpExpiration.Value.Date,
                     Quantity = Quantity,
-                    CategoryId = category.Id // only the Id is saved, not the category object
+                    idCategorie = category.id // only the Id is saved, not the category object
                 };
             }
 
             DialogResult = DialogResult.OK; // closes the dialog
+        }
+
+        private void AddForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

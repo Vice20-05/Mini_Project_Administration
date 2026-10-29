@@ -6,9 +6,9 @@ namespace Mini_Project_Administration
     // and points to the SQLite file shop.db.
     public class ShopDbContext : DbContext
     {
-        public DbSet<ProductCategory> Categories { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<SalesHistory> Sales { get; set; }
+        public DbSet<CategorieProdus> Categories { get; set; }
+        public DbSet<Produse> Products { get; set; }
+        public DbSet<IstoricVanzari> Sales { get; set; }
 
         static ShopDbContext()
         {
@@ -31,26 +31,26 @@ namespace Mini_Project_Administration
         {
             Database.ExecuteSqlCommand(
                 @"CREATE TABLE IF NOT EXISTS ProductCategories (
-                    Id   INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Name TEXT NOT NULL
+                    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+                    denumire TEXT NOT NULL
                   )");
 
             Database.ExecuteSqlCommand(
                 @"CREATE TABLE IF NOT EXISTS Products (
-                    Id             INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Name           TEXT NOT NULL,
+                    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+                    denumire       TEXT NOT NULL,
                     Description    TEXT,
                     EntryDate      DATETIME NOT NULL,
                     ExpirationDate DATETIME NOT NULL,
                     Quantity       INT NOT NULL,
-                    CategoryId     INT NOT NULL REFERENCES ProductCategories(Id)
+                    idCategorie    INT NOT NULL REFERENCES ProductCategories(id)
                   )");
 
             Database.ExecuteSqlCommand(
-                @"CREATE TABLE IF NOT EXISTS SalesHistory (
-                    Id        INTEGER PRIMARY KEY AUTOINCREMENT,
-                    ProductId INT NOT NULL REFERENCES Products(Id),
-                    Quantity  INT NOT NULL
+                @"CREATE TABLE IF NOT EXISTS IstoricVanzari (
+                    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                    idProdus  INT NOT NULL REFERENCES Products(id),
+                    cantitate INT NOT NULL
                   )");
         }
     }

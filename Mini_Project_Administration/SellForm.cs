@@ -10,13 +10,13 @@ namespace Mini_Project_Administration
         public int SoldQuantity { get { return (int)numSell.Value; } }
 
         // the constructor receives the details of the selected record
-        public SellForm(Product product)
+        public SellForm(Produse product)
         {
             InitializeComponent();
 
             lblDetails.Text =
-                "Id: " + product.Id + "\n" +
-                "Name: " + product.Name + "\n" +
+                "Id: " + product.id + "\n" +
+                "Name: " + product.denumire + "\n" +
                 "Category: " + product.CategoryName + "\n" +
                 "Description: " + product.Description + "\n" +
                 "Entry date: " + product.EntryDate.ToShortDateString() + "\n" +

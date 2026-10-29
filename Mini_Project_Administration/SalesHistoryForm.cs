@@ -24,37 +24,37 @@ namespace Mini_Project_Administration
         // the result of one load: sales rows + the categories for the ComboBox
         private class SalesResult
         {
-            public List<SaleRow> Rows;
-            public List<ProductCategory> Categories;
+            public List<RandVanzare> Rows;
+            public List<CategorieProdus> Categories;
         }
 
         // Loads the sales on the Thread Pool (DbTask), optionally filtered by category
         private void LoadSales(bool reloadCategories)
         {
             // read the UI here, before leaving the GUI thread
-            ProductCategory selected = cboCategory.SelectedItem as ProductCategory;
-            int categoryId = selected == null ? 0 : selected.Id;
+            CategorieProdus selected = cboCategory.SelectedItem as CategorieProdus;
+            int categoryId = selected == null ? 0 : selected.id;
             lblStatus.Text = "Loading...";
 
             DbTask.Run(this, db =>
             {
                 SalesResult result = new SalesResult();
 
-                // SalesHistory -> Product -> ProductCategory, EF makes the JOINs from the navigation properties
+                // IstoricVanzari -> Product -> CategorieProdus, EF makes the JOINs from the navigation properties
                 result.Rows = (from s in db.Sales
-                               where categoryId == 0 || s.Product.CategoryId == categoryId
-                               orderby s.Id descending
-                               select new SaleRow
+                               where categoryId == 0 || s.Product.idCategorie == categoryId
+                               orderby s.id descending
+                               select new RandVanzare
                                {
-                                   SaleId = s.Id,
-                                   ProductId = s.ProductId,
-                                   ProductName = s.Product.Name,
-                                   Category = s.Product.Category.Name,
-                                   Quantity = s.Quantity
+                                   idVanzare = s.id,
+                                   idProdus = s.idProdus,
+                                   denumireProdus = s.Product.denumire,
+                                   categorie = s.Product.Category.denumire,
+                                   cantitate = s.cantitate
                                }).ToList();
 
                 if (reloadCategories)
-                    result.Categories = db.Categories.OrderBy(c => c.Name).ToList();
+                    result.Categories = db.Categories.OrderBy(c => c.denumire).ToList();
                 return result;
             },
             (result, error) =>
@@ -68,21 +68,23 @@ namespace Mini_Project_Administration
                     FillCategoryFilter(result.Categories);
 
                 dataGridView1.DataSource = result.Rows;
-                dataGridView1.Columns["SaleId"].HeaderText = "Sale Id";
-                dataGridView1.Columns["ProductId"].HeaderText = "Product Id";
-                dataGridView1.Columns["ProductName"].HeaderText = "Product";
+                dataGridView1.Columns["idVanzare"].HeaderText = "Sale Id";
+                dataGridView1.Columns["idProdus"].HeaderText = "Product Id";
+                dataGridView1.Columns["denumireProdus"].HeaderText = "Product";
+                dataGridView1.Columns["categorie"].HeaderText = "Category";
+                dataGridView1.Columns["cantitate"].HeaderText = "Quantity";
 
-                lblStatus.Text = result.Rows.Count + " sales, " + result.Rows.Sum(r => r.Quantity) + " pieces sold";
+                lblStatus.Text = result.Rows.Count + " sales, " + result.Rows.Sum(r => r.cantitate) + " pieces sold";
             });
         }
 
         // "(All categories)" + every category
-        private void FillCategoryFilter(List<ProductCategory> categories)
+        private void FillCategoryFilter(List<CategorieProdus> categories)
         {
             fillingCategoryFilter = true;
             cboCategory.Items.Clear();
-            cboCategory.Items.Add(new ProductCategory { Id = 0, Name = "(All categories)" });
-            foreach (ProductCategory c in categories)
+            cboCategory.Items.Add(new CategorieProdus { id = 0, denumire = "(All categories)" });
+            foreach (CategorieProdus c in categories)
                 cboCategory.Items.Add(c);
             cboCategory.SelectedIndex = 0;
             fillingCategoryFilter = false;

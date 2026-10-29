@@ -7,37 +7,37 @@ namespace Mini_Project_Administration
 {
     // New in Project 2: product category managed by EF (Id, Name)
     [Table("ProductCategories")]
-    public class ProductCategory
+    public class CategorieProdus
     {
         // primary key (auto-increment)
-        public int Id { get; set; }
+        public int id { get; set; }
 
         // category name, max 50 characters
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
+        public string denumire { get; set; }
 
         // all products in this category (navigation property, one category -> many products)
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Produse> Products { get; set; }
 
         // the ComboBoxes show this text
         public override string ToString()
         {
-            return Name;
+            return denumire;
         }
     }
 
-    // Product from Lab 5 + the new CategoryId field
+    // Produse from Lab 5 + the new idCategorie field
     [Table("Products")]
-    public class Product
+    public class Produse
     {
         // unique identifier (primary key, auto-increment)
-        public int Id { get; set; }
+        public int id { get; set; }
 
         // name, max 30 characters
         [Required]
         [MaxLength(30)]
-        public string Name { get; set; }
+        public string denumire { get; set; }
 
         // description, max 500 characters
         [MaxLength(500)]
@@ -52,54 +52,54 @@ namespace Mini_Project_Administration
         // available quantity
         public int Quantity { get; set; }
 
-        // New in Project 2: foreign key to ProductCategory
-        public int CategoryId { get; set; }
+        // New in Project 2: foreign key to CategorieProdus
+        public int idCategorie { get; set; }
 
         // navigation property, EF fills it when we use Include(p => p.Category)
-        [ForeignKey("CategoryId")]
-        public virtual ProductCategory Category { get; set; }
+        [ForeignKey("idCategorie")]
+        public virtual CategorieProdus Category { get; set; }
 
         // only for display in the grid, not stored in the database
         [NotMapped]
         public string CategoryName
         {
-            get { return Category == null ? "" : Category.Name; }
+            get { return Category == null ? "" : Category.denumire; }
         }
     }
 
-    // New in Project 2: one row for every sale (Id, ProductId, Quantity)
-    [Table("SalesHistory")]
-    public class SalesHistory
+    // New in Project 2: one row for every sale (id, idProdus, cantitate)
+    [Table("IstoricVanzari")]
+    public class IstoricVanzari
     {
         // primary key (auto-increment)
-        public int Id { get; set; }
+        public int id { get; set; }
 
         // foreign key to the sold product
-        public int ProductId { get; set; }
+        public int idProdus { get; set; }
 
         // how many pieces were sold
-        public int Quantity { get; set; }
+        public int cantitate { get; set; }
 
         // navigation property to the sold product (and through it to the category)
-        [ForeignKey("ProductId")]
-        public virtual Product Product { get; set; }
+        [ForeignKey("idProdus")]
+        public virtual Produse Product { get; set; }
     }
 
     // one row in the "Sales history" grid (product and category names instead of only Ids)
-    public class SaleRow
+    public class RandVanzare
     {
-        public int SaleId { get; set; }
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
-        public string Category { get; set; }
-        public int Quantity { get; set; }
+        public int idVanzare { get; set; }
+        public int idProdus { get; set; }
+        public string denumireProdus { get; set; }
+        public string categorie { get; set; }
+        public int cantitate { get; set; }
     }
 
     // one row in the "Categories" grid (category + how many products it has)
-    public class CategoryRow
+    public class RandCategorie
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int ProductCount { get; set; }
+        public int id { get; set; }
+        public string denumire { get; set; }
+        public int numarProduse { get; set; }
     }
 }

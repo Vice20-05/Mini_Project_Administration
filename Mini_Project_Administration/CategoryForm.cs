@@ -23,7 +23,7 @@ namespace Mini_Project_Administration
         private class CategoryResult
         {
             public string Message;
-            public List<CategoryRow> Rows;
+            public List<RandCategorie> Rows;
         }
 
         // Runs dbWork on the Thread Pool (DbTask), then reloads the category grid on the GUI thread
@@ -39,12 +39,12 @@ namespace Mini_Project_Administration
 
                 // every category + how many products it has
                 result.Rows = (from c in db.Categories
-                               orderby c.Name
-                               select new CategoryRow
+                               orderby c.denumire
+                               select new RandCategorie
                                {
-                                   Id = c.Id,
-                                   Name = c.Name,
-                                   ProductCount = c.Products.Count()
+                                   id = c.id,
+                                   denumire = c.denumire,
+                                   numarProduse = c.Products.Count()
                                }).ToList();
                 return result;
             },
@@ -57,7 +57,9 @@ namespace Mini_Project_Administration
                     return;
                 }
                 dataGridView1.DataSource = result.Rows;
-                dataGridView1.Columns["ProductCount"].HeaderText = "Products";
+                dataGridView1.Columns["id"].HeaderText = "Id";
+                dataGridView1.Columns["denumire"].HeaderText = "Name";
+                dataGridView1.Columns["numarProduse"].HeaderText = "Products";
                 lblStatus.Text = result.Message;
             });
         }
@@ -68,19 +70,19 @@ namespace Mini_Project_Administration
         }
 
         // the category selected in the grid (null if nothing is selected)
-        private CategoryRow SelectedCategory()
+        private RandCategorie SelectedCategory()
         {
             if (dataGridView1.CurrentRow == null)
                 return null;
-            return (CategoryRow)dataGridView1.CurrentRow.DataBoundItem;
+            return (RandCategorie)dataGridView1.CurrentRow.DataBoundItem;
         }
 
         // clicking a row copies its name into the text box (easier renaming)
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            CategoryRow selected = SelectedCategory();
+            RandCategorie selected = SelectedCategory();
             if (selected != null)
-                txtName.Text = selected.Name;
+                txtName.Text = selected.denumire;
         }
 
         // checks the name typed by the user, returns null if it is not OK
@@ -106,10 +108,10 @@ namespace Mini_Project_Administration
             {
                 // no two categories with the same name
                 string lowerName = name.ToLower();
-                if (db.Categories.Any(c => c.Name.ToLower() == lowerName))
+                if (db.Categories.Any(c => c.denumire.ToLower() == lowerName))
                     return "Category \"" + name + "\" already exists";
 
-                db.Categories.Add(new ProductCategory { Name = name });
+                db.Categories.Add(new CategorieProdus { denumire = name });
                 db.SaveChanges();
                 return "Added category: " + name;
             });
@@ -118,7 +120,7 @@ namespace Mini_Project_Administration
         // Rename the selected category
         private void btnRename_Click(object sender, EventArgs e)
         {
-            CategoryRow selected = SelectedCategory();
+            RandCategorie selected = SelectedCategory();
             if (selected == null)
             {
                 MessageBox.Show("Select a category first.");
@@ -128,18 +130,18 @@ namespace Mini_Project_Administration
             if (newName == null)
                 return;
 
-            int id = selected.Id;
+            int id = selected.id;
             RunCategoryTask(db =>
             {
                 string lowerName = newName.ToLower();
-                if (db.Categories.Any(c => c.Id != id && c.Name.ToLower() == lowerName))
+                if (db.Categories.Any(c => c.id != id && c.denumire.ToLower() == lowerName))
                     return "Category \"" + newName + "\" already exists";
 
-                ProductCategory category = db.Categories.Find(id);
+                CategorieProdus category = db.Categories.Find(id);
                 if (category == null)
                     return "Category no longer exists";
 
-                category.Name = newName;
+                category.denumire = newName;
                 db.SaveChanges();
                 return "Renamed to: " + newName;
             });
@@ -148,32 +150,37 @@ namespace Mini_Project_Administration
         // Delete the selected category (only if it has no products)
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            CategoryRow selected = SelectedCategory();
+            RandCategorie selected = SelectedCategory();
             if (selected == null)
             {
                 MessageBox.Show("Select a category first.");
                 return;
             }
-            if (MessageBox.Show("Delete category \"" + selected.Name + "\"?", "Delete",
+            if (MessageBox.Show("Delete category \"" + selected.denumire + "\"?", "Delete",
                     MessageBoxButtons.YesNo) != DialogResult.Yes)
                 return;
 
-            int id = selected.Id;
+            int id = selected.id;
             RunCategoryTask(db =>
             {
                 // blocked: products (and through them the sales history) still use this category
-                int productCount = db.Products.Count(p => p.CategoryId == id);
+                int productCount = db.Products.Count(p => p.idCategorie == id);
                 if (productCount > 0)
                     return "Can't delete: the category still has " + productCount + " product(s)";
 
-                ProductCategory category = db.Categories.Find(id);
+                CategorieProdus category = db.Categories.Find(id);
                 if (category == null)
                     return "Category no longer exists";
 
                 db.Categories.Remove(category);
                 db.SaveChanges();
-                return "Deleted category: " + category.Name;
+                return "Deleted category: " + category.denumire;
             });
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

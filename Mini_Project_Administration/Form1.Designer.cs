@@ -46,9 +46,9 @@
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // menuStrip1
-            //
+            // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addProductsToolStripMenuItem,
             this.sellProductsToolStripMenuItem,
@@ -59,95 +59,95 @@
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(900, 24);
             this.menuStrip1.TabIndex = 0;
-            //
+            // 
             // addProductsToolStripMenuItem
-            //
+            // 
             this.addProductsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newProductToolStripMenuItem,
             this.existingProductToolStripMenuItem});
             this.addProductsToolStripMenuItem.Name = "addProductsToolStripMenuItem";
-            this.addProductsToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
+            this.addProductsToolStripMenuItem.Size = new System.Drawing.Size(91, 20);
             this.addProductsToolStripMenuItem.Text = "Add products";
-            //
+            // 
             // newProductToolStripMenuItem
-            //
+            // 
             this.newProductToolStripMenuItem.Name = "newProductToolStripMenuItem";
-            this.newProductToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.newProductToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
             this.newProductToolStripMenuItem.Text = "New product";
             this.newProductToolStripMenuItem.Click += new System.EventHandler(this.newProductToolStripMenuItem_Click);
-            //
+            // 
             // existingProductToolStripMenuItem
-            //
+            // 
             this.existingProductToolStripMenuItem.Name = "existingProductToolStripMenuItem";
-            this.existingProductToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.existingProductToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
             this.existingProductToolStripMenuItem.Text = "Quantity to existing product";
             this.existingProductToolStripMenuItem.Click += new System.EventHandler(this.existingProductToolStripMenuItem_Click);
-            //
+            // 
             // sellProductsToolStripMenuItem
-            //
+            // 
             this.sellProductsToolStripMenuItem.Name = "sellProductsToolStripMenuItem";
-            this.sellProductsToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
+            this.sellProductsToolStripMenuItem.Size = new System.Drawing.Size(87, 20);
             this.sellProductsToolStripMenuItem.Text = "Sell products";
             this.sellProductsToolStripMenuItem.Click += new System.EventHandler(this.sellProductsToolStripMenuItem_Click);
-            //
+            // 
             // searchProductsToolStripMenuItem
-            //
+            // 
             this.searchProductsToolStripMenuItem.Name = "searchProductsToolStripMenuItem";
-            this.searchProductsToolStripMenuItem.Size = new System.Drawing.Size(103, 20);
+            this.searchProductsToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
             this.searchProductsToolStripMenuItem.Text = "Search products";
             this.searchProductsToolStripMenuItem.Click += new System.EventHandler(this.searchProductsToolStripMenuItem_Click);
-            //
+            // 
             // categoriesToolStripMenuItem
-            //
+            // 
             this.categoriesToolStripMenuItem.Name = "categoriesToolStripMenuItem";
             this.categoriesToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
             this.categoriesToolStripMenuItem.Text = "Categories";
             this.categoriesToolStripMenuItem.Click += new System.EventHandler(this.categoriesToolStripMenuItem_Click);
-            //
+            // 
             // salesHistoryToolStripMenuItem
-            //
+            // 
             this.salesHistoryToolStripMenuItem.Name = "salesHistoryToolStripMenuItem";
-            this.salesHistoryToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
+            this.salesHistoryToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
             this.salesHistoryToolStripMenuItem.Text = "Sales history";
             this.salesHistoryToolStripMenuItem.Click += new System.EventHandler(this.salesHistoryToolStripMenuItem_Click);
-            //
+            // 
             // lblSearch
-            //
+            // 
             this.lblSearch.AutoSize = true;
             this.lblSearch.Location = new System.Drawing.Point(12, 36);
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(44, 13);
             this.lblSearch.TabIndex = 1;
             this.lblSearch.Text = "Search:";
-            //
+            // 
             // txtSearch
-            //
+            // 
             this.txtSearch.Location = new System.Drawing.Point(62, 33);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(250, 20);
             this.txtSearch.TabIndex = 2;
             this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
-            //
+            // 
             // lblCategoryFilter
-            //
+            // 
             this.lblCategoryFilter.AutoSize = true;
             this.lblCategoryFilter.Location = new System.Drawing.Point(330, 36);
             this.lblCategoryFilter.Name = "lblCategoryFilter";
             this.lblCategoryFilter.Size = new System.Drawing.Size(52, 13);
             this.lblCategoryFilter.TabIndex = 3;
             this.lblCategoryFilter.Text = "Category:";
-            //
+            // 
             // cboCategoryFilter
-            //
+            // 
             this.cboCategoryFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboCategoryFilter.Location = new System.Drawing.Point(388, 33);
             this.cboCategoryFilter.Name = "cboCategoryFilter";
             this.cboCategoryFilter.Size = new System.Drawing.Size(180, 21);
             this.cboCategoryFilter.TabIndex = 4;
             this.cboCategoryFilter.SelectedIndexChanged += new System.EventHandler(this.cboCategoryFilter_SelectedIndexChanged);
-            //
+            // 
             // btnRefresh
-            //
+            // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefresh.Location = new System.Drawing.Point(813, 31);
             this.btnRefresh.Name = "btnRefresh";
@@ -156,13 +156,13 @@
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            //
+            // 
             // dataGridView1
-            //
+            // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -173,19 +173,20 @@
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(876, 405);
             this.dataGridView1.TabIndex = 6;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
-            //
+            // 
             // lblStatus
-            //
+            // 
             this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblStatus.AutoSize = true;
             this.lblStatus.Location = new System.Drawing.Point(12, 475);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 13);
             this.lblStatus.TabIndex = 7;
-            //
+            // 
             // Form1
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(900, 500);

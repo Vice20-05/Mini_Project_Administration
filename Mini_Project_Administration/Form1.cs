@@ -10,7 +10,7 @@ namespace Mini_Project_Administration
     public partial class Form1 : Form
     {
         // categories from the last database load (used by the filter ComboBox and by AddForm)
-        private List<ProductCategory> categories = new List<ProductCategory>();
+        private List<CategorieProdus> categories = new List<CategorieProdus>();
 
         // true while we refill the category ComboBox, so its SelectedIndexChanged doesn't reload the grid
         private bool fillingCategoryFilter = false;
@@ -34,8 +34,8 @@ namespace Mini_Project_Administration
         private class LoadResult
         {
             public string Message;
-            public List<Product> Products;
-            public List<ProductCategory> Categories;
+            public List<Produse> Products;
+            public List<CategorieProdus> Categories;
         }
 
         // Runs dbWork on the Thread Pool (through DbTask), then reloads products + categories,
@@ -52,7 +52,7 @@ namespace Mini_Project_Administration
                 LoadResult result = new LoadResult();
                 result.Message = dbWork(db);                        // the actual operation (add / sell / nothing)
                 result.Products = LoadProducts(db, filter, categoryId); // then reload the grid content
-                result.Categories = db.Categories.OrderBy(c => c.Name).ToList();
+                result.Categories = db.Categories.OrderBy(c => c.denumire).ToList();
                 return result;
             },
             (result, error) =>
@@ -67,15 +67,15 @@ namespace Mini_Project_Administration
         // Search = filtering what the grid shows (by name, description or category name)
         // + optional filter by the category chosen in the ComboBox (0 = all categories)
         // (everything is compared in lower case, because Contains() is case-sensitive in SQLite)
-        private List<Product> LoadProducts(ShopDbContext db, string filter, int categoryId)
+        private List<Produse> LoadProducts(ShopDbContext db, string filter, int categoryId)
         {
             filter = filter.ToLower();
             var query = from p in db.Products.Include(p => p.Category)
-                        where (filter == "" || p.Name.ToLower().Contains(filter)
+                        where (filter == "" || p.denumire.ToLower().Contains(filter)
                                || p.Description.ToLower().Contains(filter)
-                               || p.Category.Name.ToLower().Contains(filter))
-                           && (categoryId == 0 || p.CategoryId == categoryId)
-                        orderby p.Id
+                               || p.Category.denumire.ToLower().Contains(filter))
+                           && (categoryId == 0 || p.idCategorie == categoryId)
+                        orderby p.id
                         select p;
             return query.ToList();
         }
@@ -91,8 +91,8 @@ namespace Mini_Project_Administration
             // hide the technical columns, the grid shows CategoryName instead
             if (dataGridView1.Columns["Category"] != null)
                 dataGridView1.Columns["Category"].Visible = false;
-            if (dataGridView1.Columns["CategoryId"] != null)
-                dataGridView1.Columns["CategoryId"].Visible = false;
+            if (dataGridView1.Columns["idCategorie"] != null)
+                dataGridView1.Columns["idCategorie"].Visible = false;
             if (dataGridView1.Columns["CategoryName"] != null)
                 dataGridView1.Columns["CategoryName"].HeaderText = "Category";
 
@@ -106,12 +106,12 @@ namespace Mini_Project_Administration
             fillingCategoryFilter = true;
 
             cboCategoryFilter.Items.Clear();
-            cboCategoryFilter.Items.Add(new ProductCategory { Id = 0, Name = "(All categories)" });
+            cboCategoryFilter.Items.Add(new CategorieProdus { id = 0, denumire = "(All categories)" });
             int indexToSelect = 0;
-            foreach (ProductCategory c in categories)
+            foreach (CategorieProdus c in categories)
             {
                 int index = cboCategoryFilter.Items.Add(c);
-                if (c.Id == selectedId)
+                if (c.id == selectedId)
                     indexToSelect = index;
             }
             cboCategoryFilter.SelectedIndex = indexToSelect;
@@ -122,8 +122,8 @@ namespace Mini_Project_Administration
         // Id of the category chosen in the filter ComboBox (0 = all)
         private int SelectedFilterCategoryId()
         {
-            ProductCategory selected = cboCategoryFilter.SelectedItem as ProductCategory;
-            return selected == null ? 0 : selected.Id;
+            CategorieProdus selected = cboCategoryFilter.SelectedItem as CategorieProdus;
+            return selected == null ? 0 : selected.id;
         }
 
         // choosing another category in the ComboBox filters the grid right away
@@ -178,12 +178,12 @@ namespace Mini_Project_Administration
             if (form.ShowDialog() != DialogResult.OK)
                 return;
 
-            Product newProduct = form.NewProduct;
+            Produse newProduct = form.NewProduct;
             RunDbTask(db =>
             {
                 db.Products.Add(newProduct);
                 db.SaveChanges();
-                return "Added: " + newProduct.Name;
+                return "Added: " + newProduct.denumire; 
             });
         }
 
@@ -192,7 +192,7 @@ namespace Mini_Project_Administration
         {
             int selectedId = 0;
             if (dataGridView1.CurrentRow != null)
-                selectedId = ((Product)dataGridView1.CurrentRow.DataBoundItem).Id;
+                selectedId = ((Produse)dataGridView1.CurrentRow.DataBoundItem).id;
 
             AddForm form = new AddForm(true, categories, selectedId);
             if (form.ShowDialog() != DialogResult.OK)
@@ -202,13 +202,13 @@ namespace Mini_Project_Administration
             int quantity = form.Quantity;
             RunDbTask(db =>
             {
-                Product product = db.Products.Find(id);
+                Produse product = db.Products.Find(id);
                 if (product == null)
                     return "No product with Id " + id;
 
                 product.Quantity += quantity;
                 db.SaveChanges();
-                return product.Name + " quantity is now " + product.Quantity;
+                return product.denumire + " quantity is now " + product.Quantity;
             });
         }
 
@@ -218,7 +218,7 @@ namespace Mini_Project_Administration
             if (e.RowIndex < 0)
                 return; // header was clicked
 
-            Product selected = (Product)dataGridView1.Rows[e.RowIndex].DataBoundItem;
+            Produse selected = (Produse)dataGridView1.Rows[e.RowIndex].DataBoundItem;
             SellProduct(selected);
         }
 
@@ -230,15 +230,15 @@ namespace Mini_Project_Administration
                 MessageBox.Show("Select a product in the table first (or double click it).");
                 return;
             }
-            SellProduct((Product)dataGridView1.CurrentRow.DataBoundItem);
+            SellProduct((Produse)dataGridView1.CurrentRow.DataBoundItem);
         }
 
-        // Sells a product: lowers its quantity and writes a row into SalesHistory
-        private void SellProduct(Product selected)
+        // Sells a product: lowers its quantity and writes a row into IstoricVanzari
+        private void SellProduct(Produse selected)
         {
             if (selected.Quantity == 0)
             {
-                MessageBox.Show(selected.Name + " is sold out. Add quantity first (Add products -> Quantity to existing product).");
+                MessageBox.Show(selected.denumire + " is sold out. Add quantity first (Add products -> Quantity to existing product).");
                 return;
             }
 
@@ -246,11 +246,11 @@ namespace Mini_Project_Administration
             if (form.ShowDialog() != DialogResult.OK)
                 return;
 
-            int id = selected.Id;
+            int id = selected.id;
             int sold = form.SoldQuantity;
             RunDbTask(db =>
             {
-                Product product = db.Products.Find(id);
+                Produse product = db.Products.Find(id);
                 if (product == null)
                     return "Product no longer exists";
                 if (sold > product.Quantity)
@@ -259,12 +259,12 @@ namespace Mini_Project_Administration
                 product.Quantity -= sold;
 
                 // New in Project 2: remember the sale in the history
-                db.Sales.Add(new SalesHistory { ProductId = id, Quantity = sold });
+                db.Sales.Add(new IstoricVanzari { idProdus = id, cantitate = sold });
                 db.SaveChanges();
 
                 // The product is NOT deleted at 0 (like in Lab 5), because the sales history
                 // points to it and has to show its name and category.
-                string message = "Sold " + sold + " x " + product.Name;
+                string message = "Sold " + sold + " x " + product.denumire;
                 if (product.Quantity == 0)
                     message += " (sold out)";
                 return message;
@@ -284,6 +284,11 @@ namespace Mini_Project_Administration
         {
             SalesHistoryForm form = new SalesHistoryForm();
             form.ShowDialog();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
